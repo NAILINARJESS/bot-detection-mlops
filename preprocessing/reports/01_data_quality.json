@@ -1,0 +1,49 @@
+{
+    "shape": [
+        4198,
+        19
+    ],
+    "missing_values": {
+        "event_id": 0,
+        "session_id": 0,
+        "timestamp": 0,
+        "event_time": 0,
+        "hour": 0,
+        "day_of_week": 0,
+        "action": 0,
+        "action_code": 0,
+        "actions_per_session": 0,
+        "session_duration_sec": 0,
+        "time_diff_sec": 0,
+        "ip_address": 0,
+        "is_private_ip": 0,
+        "user_agent": 0,
+        "device_type": 0,
+        "browser_family": 0,
+        "os_family": 0,
+        "is_bot": 0,
+        "bot_type": 0
+    },
+    "dtypes": {
+        "event_id": "object",
+        "session_id": "object",
+        "timestamp": "object",
+        "event_time": "object",
+        "hour": "int64",
+        "day_of_week": "int64",
+        "action": "object",
+        "action_code": "int64",
+        "actions_per_session": "int64",
+        "session_duration_sec": "float64",
+        "time_diff_sec": "float64",
+        "ip_address": "object",
+        "is_private_ip": "int64",
+        "user_agent": "object",
+        "device_type": "object",
+        "browser_family": "object",
+        "os_family": "object",
+        "is_bot": "int64",
+        "bot_type": "object"
+    },
+    "duplicates": 0
+}

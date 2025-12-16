@@ -1,0 +1,24 @@
+services:
+  bot-api:
+    build:
+      context: .               # racine du projet
+      dockerfile: src/api/Dockerfile
+    container_name: bot-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./src/tracking:/app/src/tracking
+    environment:
+      - MODEL_PATH=/app/src/tracking/bot_detection_latest.pkl
+    restart: unless-stopped
+  bot-frontend:
+    image: nginx:alpine
+    container_name: bot-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/frontend:/usr/share/nginx/html
+    restart: unless-stopped
+
+
