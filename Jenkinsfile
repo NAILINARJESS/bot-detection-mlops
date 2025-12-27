@@ -2,72 +2,51 @@ pipeline {
     agent any
 
     environment {
-        DAGSHUB_TOKEN = credentials("dagshub-token")
+        IMAGE_API = "bot-api:latest"
+        IMAGE_FRONTEND = "bot-frontend:latest"
+        COMPOSE_FILE = "src/docker-compose.yml"
     }
 
     stages {
-
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/NAILINARJESS/mlops_docker_repo.git',
-                    credentialsId: 'github-credentials'
-            }
-        }
-
-        stage('Setup Environment') {
-            steps {
-                sh '''
-                  python3 -m venv venv
-                 ./venv/bin/python -m ensurepip
-                 ./venv/bin/python -m pip install --upgrade pip
-                 ./venv/bin/python -m pip install -r requirements.txt
-                  '''
-
-            }
-        }
-
-        stage('ML Training & Tracking') {
-            steps {
-                sh """
-                export DAGSHUB_TOKEN=${DAGSHUB_TOKEN}
-                ./venv/bin/python src/tracking/mlflow_tracking.py
-                """
+                git url: 'https://github.com/NAILINARJESS/mlops_docker_repo.git', branch: 'main'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh """
-                docker build -t bot-api -f src/api/Dockerfile .
-                docker build -t bot-frontend -f src/frontend/Dockerfile src/frontend
-                """
+                script {
+                    // Construire API
+                    sh 'docker build -t $IMAGE_API -f src/api/Dockerfile .'
+
+                    // Construire Frontend
+                    sh 'docker build -t $IMAGE_FRONTEND -f src/frontend/Dockerfile .'
+                }
             }
         }
 
-        stage('Docker Compose Up') {
+        stage('Run Docker Compose') {
             steps {
-                sh """
-                docker-compose -f src/docker-compose.yml up -d --build
-                """
+                script {
+                    sh 'docker compose -f $COMPOSE_FILE down || true'
+                    sh 'docker compose -f $COMPOSE_FILE up -d --build'
+                }
             }
         }
 
-        stage('Cleanup') {
+        stage('Clean Up') {
             steps {
-                sh """
-                docker-compose -f src/docker-compose.yml down
-                """
+                script {
+                    sh 'docker compose -f $COMPOSE_FILE down'
+                }
             }
         }
     }
 
     post {
-        success {
-            echo "✅ Pipeline CI/CD MLOps exécuté avec succès"
-        }
-        failure {
-            echo "❌ Échec du pipeline"
+        always {
+            echo "Pipeline terminée"
         }
     }
 }
