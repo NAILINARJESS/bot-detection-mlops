@@ -1,12 +1,11 @@
 pipeline {
     agent any
-    environment {
-    DOCKER_HOST = "tcp://host.docker.internal:2375"
-    IMAGE_API = "bot-api:latest"
-    IMAGE_FRONTEND = "bot-frontend:latest"
-    COMPOSE_FILE = "docker-compose.yml"
-}
 
+    environment {
+        IMAGE_API = "bot-api:latest"
+        IMAGE_FRONTEND = "bot-frontend:latest"
+        COMPOSE_FILE = "docker-compose.yml"
+    }
 
     stages {
         stage('Checkout') {
@@ -18,37 +17,37 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Construire API
+                    echo "Building Docker images..."
                     sh 'docker build -t $IMAGE_API -f src/api/Dockerfile .'
-
-                    // Construire Frontend
                     sh 'docker build -t $IMAGE_FRONTEND -f src/frontend/Dockerfile .'
+                    sh 'docker images' // Vérifie que les images ont été créées
                 }
             }
         }
 
-        stage('Run Docker Compose') {
+        stage('Deploy with Docker Compose') {
             steps {
                 script {
+                    echo "Stopping any running containers..."
                     sh 'docker compose -f $COMPOSE_FILE down || true'
-                    sh 'docker compose -f $COMPOSE_FILE up -d --build'
-                    
-                }
-            }
-        }
 
-        stage('Clean Up') {
-            steps {
-                script {
-                    sh 'docker compose -f $COMPOSE_FILE down'
+                    echo "Starting containers..."
+                    sh 'docker compose -f $COMPOSE_FILE up -d --build'
+
+                    echo "List of running containers:"
+                    sh 'docker ps -a'
                 }
             }
         }
     }
 
     post {
-        always {
-            echo "Pipeline terminée"
+        success {
+            echo "Pipeline terminée avec succès. Les containers tournent toujours."
+        }
+        failure {
+            echo "La pipeline a échoué. Vérifiez les logs et les containers."
+            sh 'docker ps -a'
         }
     }
 }
