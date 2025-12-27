@@ -1,11 +1,12 @@
 pipeline {
     agent any
-
     environment {
-        IMAGE_API = "bot-api:latest"
-        IMAGE_FRONTEND = "bot-frontend:latest"
-        COMPOSE_FILE = "src/docker-compose.yml"
-    }
+    DOCKER_HOST = "tcp://host.docker.internal:2375"
+    IMAGE_API = "bot-api:latest"
+    IMAGE_FRONTEND = "bot-frontend:latest"
+    COMPOSE_FILE = "src/docker-compose.yml"
+}
+
 
     stages {
         stage('Checkout') {
