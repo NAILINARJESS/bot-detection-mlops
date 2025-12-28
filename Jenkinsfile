@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        DOCKER_HOST = "tcp://host.docker.internal:2375"
         IMAGE_API = "bot-api:latest"
         IMAGE_FRONTEND = "bot-frontend:latest"
         COMPOSE_FILE = "docker-compose.yml"
