@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "Checkout du repository..."
+                echo "🔄 Checkout du repository..."
                 git url: 'https://github.com/NAILINARJESS/mlops_docker_repo.git', 
                     branch: 'main', 
                     credentialsId: "${GITHUB_CREDENTIALS}"
@@ -22,20 +22,20 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                echo "Building Docker API image..."
+                echo "🐳 Building Docker API image..."
                 sh "docker build -t $IMAGE_API -f src/api/Dockerfile ."
                 
-                echo "Building Docker Frontend image..."
+                echo "🐳 Building Docker Frontend image..."
                 sh "docker build -t $IMAGE_FRONTEND -f src/frontend/Dockerfile src/frontend"
                 
-                echo "Images disponibles :"
+                echo "🖼 Images disponibles :"
                 sh "docker images"
             }
         }
 
         stage('Push Docker Images to Docker Hub') {
             steps {
-                echo "Pushing Docker images to Docker Hub..."
+                echo "⬆️ Pushing Docker images to Docker Hub..."
                 withCredentials([usernamePassword(
                     credentialsId: "${DOCKERHUB_CREDENTIALS}", 
                     usernameVariable: 'DOCKER_USER', 
@@ -54,12 +54,9 @@ pipeline {
 
         stage('Deploy with Docker Compose') {
             steps {
-                echo "Stopping any running containers..."
+                echo "🚀 Deploying with Docker Compose..."
                 sh "docker compose -f $COMPOSE_FILE down || true"
-                
-                echo "Starting containers..."
                 sh "docker compose -f $COMPOSE_FILE up -d --build"
-                
                 sh "docker ps -a"
             }
         }
@@ -67,10 +64,10 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline terminée. Les containers tournent et les images sont sur Docker Hub."
+            echo "🔔 Pipeline terminée."
         }
         success {
-            echo "✅ Pipeline CI/CD réussi !"
+            echo "✅ Pipeline CI/CD réussi ! Les containers tournent et les images sont sur Docker Hub."
         }
         failure {
             echo "❌ Pipeline échoué. Vérifie les logs pour corriger les erreurs."
