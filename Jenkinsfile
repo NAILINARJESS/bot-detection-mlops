@@ -19,9 +19,9 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker images..."
-                    bat "docker build -t %IMAGE_API% -f src/api/Dockerfile ."
-                    bat "docker build -t %IMAGE_FRONTEND% -f src/frontend/Dockerfile ."
-                    bat "docker images"
+                    sh "docker build -t $IMAGE_API -f src/api/Dockerfile ."
+                    sh "docker build -t $IMAGE_FRONTEND -f src/frontend/Dockerfile ."
+                    sh "docker images"
                 }
             }
         }
@@ -31,12 +31,12 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                         echo "Logging into DockerHub..."
-                        bat 'echo %PASS% | docker login -u %USER% --password-stdin'
+                        sh 'echo $PASS | docker login -u $USER --password-stdin'
                     }
                     echo "Pushing API image..."
-                    bat "docker push %IMAGE_API%"
+                    sh "docker push $IMAGE_API"
                     echo "Pushing Frontend image..."
-                    bat "docker push %IMAGE_FRONTEND%"
+                    sh "docker push $IMAGE_FRONTEND"
                 }
             }
         }
@@ -45,13 +45,13 @@ pipeline {
             steps {
                 script {
                     echo "Stopping any running containers..."
-                    bat "docker compose -f %COMPOSE_FILE% down || exit 0"
+                    sh "docker compose -f $COMPOSE_FILE down || true"
 
                     echo "Starting containers..."
-                    bat "docker compose -f %COMPOSE_FILE% up -d --build"
+                    sh "docker compose -f $COMPOSE_FILE up -d --build"
 
                     echo "List of running containers:"
-                    bat "docker ps -a"
+                    sh "docker ps -a"
                 }
             }
         }
@@ -63,7 +63,7 @@ pipeline {
         }
         failure {
             echo "La pipeline a échoué. Vérifiez les logs et les containers."
-            bat "docker ps -a"
+            sh "docker ps -a"
         }
     }
 }
