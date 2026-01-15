@@ -35,8 +35,7 @@ pipeline {
                     }
                     echo "Pushing API image..."
                     sh "docker push $IMAGE_API"
-                    echo "Pushing Frontend image..."
-                    sh "docker push $IMAGE_FRONTEND"
+                    
                 }
             }
         }
