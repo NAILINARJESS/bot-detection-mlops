@@ -35,6 +35,7 @@ pipeline {
                     }
                     echo "Pushing API image..."
                     sh "docker push $IMAGE_API"
+                    sh "docker push $IMAGE_FRONTEND"
                     
                 }
             }
@@ -54,6 +55,7 @@ pipeline {
                 }
             }
         }
+
     }
 
     post {
