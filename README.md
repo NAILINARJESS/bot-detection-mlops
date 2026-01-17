@@ -36,9 +36,9 @@ This repository contains a **production-ready bot detection system**, covering t
 
 ---
 
-## 🔹 Project Architecture
+## Architecture Diagram
 
-> See `/docs/architecture.png` for a visual diagram.
+![Architecture Diagram](docs/architecture.png)
 
 ---
 
