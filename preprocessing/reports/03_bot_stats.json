@@ -1,11 +1,11 @@
 {
     "bot_counts": {
-        "0": 2593,
-        "1": 1605
+        "0": 3530,
+        "1": 2120
     },
-    "bot_ratio": 0.3823249166269652,
-    "avg_time_diff_bots": 3.383716147040498,
-    "avg_time_diff_humans": 0.5943513459313536,
-    "avg_session_duration_bots": 10.680825896573209,
-    "avg_session_duration_humans": 1.328446033937524
+    "bot_ratio": 0.3752212389380531,
+    "avg_time_diff_bots": 3.335508339622641,
+    "avg_time_diff_humans": 0.4770042855524079,
+    "avg_session_duration_bots": 9.992014119811321,
+    "avg_session_duration_humans": 1.1125115314447591
 }
