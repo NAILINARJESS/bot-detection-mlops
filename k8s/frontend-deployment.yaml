@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot-frontend
+  template:
+    metadata:
+      labels:
+        app: bot-frontend
+    spec:
+      containers:
+      - name: bot-frontend
+        image: narjess010/bot-frontend:latest
+        ports:
+        - containerPort: 80

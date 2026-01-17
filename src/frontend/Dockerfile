@@ -1,15 +1,11 @@
-# Frontend simple avec Nginx
 FROM nginx:alpine
 
-# Supprimer le contenu par défaut
+# Supprime les fichiers par défaut
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copier les fichiers frontend
-COPY . /usr/share/nginx/html
+# Copier seulement le build frontend (HTML/JS/CSS)
+COPY build/ /usr/share/nginx/html
 
-# Exposer le port 80
 EXPOSE 80
-
-# Lancer Nginx
 CMD ["nginx", "-g", "daemon off;"]
 

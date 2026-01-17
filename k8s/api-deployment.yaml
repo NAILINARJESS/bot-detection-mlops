@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot-api
+  template:
+    metadata:
+      labels:
+        app: bot-api
+    spec:
+      containers:
+      - name: bot-api
+        image: narjess010/bot-api:latest
+        ports:
+        - containerPort: 8000
